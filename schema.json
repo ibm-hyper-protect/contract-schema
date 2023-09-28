@@ -7464,7 +7464,7 @@
           "title": "Volumes",
           "description": "Specification of volumes portion.",
           "patternProperties": {
-            "^[a-z_][a-z0-9_]*$": {
+            "^[a-z_][a-z0-9-_]*$": {
               "$ref": "#/allOf/3/$defs/workloadVolume"
             }
           },
@@ -7483,7 +7483,7 @@
           "title": "Volumes",
           "description": "Specification of volumes portion.",
           "patternProperties": {
-            "^[a-z_][a-z0-9_]*$": {
+            "^[a-z_][a-z0-9-_]*$": {
               "$ref": "#/allOf/3/$defs/envVolume"
             }
           },
@@ -7514,18 +7514,38 @@
             "seed": {
               "$ref": "#/allOf/3/$defs/seed"
             },
+            "previousSeed": {
+              "$ref": "#/allOf/3/$defs/previousSeed"
+            },
             "kms": {
               "$ref": "#/allOf/3/$defs/kms"
             },
             "kmsTimeout": {
               "$ref": "#/allOf/3/$defs/kmsTimeout"
+            },
+            "apiKey": {
+              "$ref": "#/allOf/3/$defs/volApiKey"
+            },
+            "volumeName": {
+              "$ref": "#/allOf/3/$defs/volumeName"
+            },
+            "volumeID": {
+              "$ref": "#/allOf/3/$defs/volumeID"
             }
           },
           "required": [
             "seed",
             "kms"
           ],
-          "additionalProperties": false
+          "additionalProperties": false,
+          "dependencies": {
+            "volumeName": [
+              "apiKey"
+            ],
+            "volumeID": [
+              "apiKey"
+            ]
+          }
         },
         "envVolumePlain": {
           "type": "object",
@@ -7534,12 +7554,32 @@
           "properties": {
             "seed": {
               "$ref": "#/allOf/3/$defs/seed"
+            },
+            "previousSeed": {
+              "$ref": "#/allOf/3/$defs/previousSeed"
+            },
+            "apiKey": {
+              "$ref": "#/allOf/3/$defs/volApiKey"
+            },
+            "volumeName": {
+              "$ref": "#/allOf/3/$defs/volumeName"
+            },
+            "volumeID": {
+              "$ref": "#/allOf/3/$defs/volumeID"
             }
           },
           "required": [
             "seed"
           ],
-          "additionalProperties": false
+          "additionalProperties": false,
+          "dependencies": {
+            "volumeName": [
+              "apiKey"
+            ],
+            "volumeID": [
+              "apiKey"
+            ]
+          }
         },
         "workloadVolume": {
           "type": "object",
@@ -7554,6 +7594,9 @@
             },
             "seed": {
               "$ref": "#/allOf/3/$defs/seed"
+            },
+            "previousSeed": {
+              "$ref": "#/allOf/3/$defs/previousSeed"
             }
           },
           "required": [
@@ -7565,6 +7608,15 @@
           "type": "string",
           "title": "seed",
           "description": "Part of the encryption seed used to encrypt the device.",
+          "minLength": 3,
+          "examples": [
+            "Lorem Ipsum"
+          ]
+        },
+        "previousSeed": {
+          "type": "string",
+          "title": "previous seed",
+          "description": "Previous seed used to encrypt the device.",
           "minLength": 3,
           "examples": [
             "Lorem Ipsum"
@@ -7593,6 +7645,35 @@
           "default": "/mnt/data",
           "examples": [
             "/mnt/data"
+          ]
+        },
+        "volApiKey": {
+          "type": "string",
+          "title": "API key",
+          "description": "API key, for fetching the volume details through Global Search API",
+          "minLength": 10,
+          "examples": [
+            "9hAyYtmhSwHjirAlKsxV_hiyHQ8DM8i1tK6wmmBVZ5v9"
+          ]
+        },
+        "volumeName": {
+          "type": "string",
+          "title": "Volume Name",
+          "description": "Volume Name",
+          "minLength": 1,
+          "examples": [
+            "test2",
+            "volume1"
+          ]
+        },
+        "volumeID": {
+          "type": "string",
+          "title": "Volume ID",
+          "description": "Volume ID",
+          "minLength": 3,
+          "examples": [
+            "virtio-0726-451ebc10-4763-4-part2",
+            "virtio-0726-60a95bf5-5277-4-part2"
           ]
         },
         "kms": {
